@@ -1,15 +1,27 @@
 const readline = require('readline-sync');
-console.log('Welcome to the calculator! \n\ ==========================');
-console.log('Please enter the operator:');
-const op = readline.prompt();
-console.log('How many numbers do you want to ' +op+ '?')
-const rep = readline.prompt();
+function printWelcome(){
+    console.log('Welcome to the calculator! \n\ ==========================');
+}
+function getStringInput(prompt){
+    console.log(prompt);
+    return readline.prompt();
+}
+function getNumInput(prompt){
+    let result
+    do{
+        result= parseInt(getStringInput(prompt));
+    }while(isNaN(result))
+    return result;
 
-var arr=Array(rep)
-for (i = 0; i <= rep; i++) {
-    var num = i+1;
-    console.log('Please enter number '+ num +':');
-    arr[i]=  parseInt(readline.prompt());
+}
+
+function getNumArray(op) {
+    const rep = getNumInput('How many numbers do you want to ' + op + '?');
+    let nums = new Array(rep);
+    for (let i = 0; i < rep; i++) {
+        nums[i] = getNumInput('Please enter number ' + (i + 1) + ':');
+    }
+    return nums;
 }
 
 function performop(a,op,b) {
@@ -30,13 +42,25 @@ function performop(a,op,b) {
 return a;
 }
 
+function doCalc(op, nums) {
+    let ans = nums[0];
+    for (i = 1; i < nums.length; i++) {
+        ans=performop(ans,op,nums[i]);
+     }
+    return ans;
+}
 
-var result= arr[0];
-
-for (i = 1; i <= rep; i++) {
-   console.log(result);
-   result=performop(result,op,arr[i]);
+function performOneCalculation(){
+    const op = getStringInput('Please enter the operator:');
+    const nums = getNumArray(op);
+    const result=doCalc(op,nums)
+    console.log('The answer is: '+result);
 }
 
 
-console.log('The answer is: '+result);
+printWelcome();
+
+do{
+    performOneCalculation();
+}while(true)
+
